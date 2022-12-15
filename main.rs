@@ -182,6 +182,72 @@ fn in_poor_elf3_b()
    println!("Sum {}", sum);
 }
 
+use std::iter::FromIterator;
+
+fn in_poor_elf4()
+{
+    let mut sum:u32 = 0;
+   
+    if let Ok(lines) = read_lines("elf4.txt")
+    {
+        for line in lines 
+        {
+            if let Ok(ip) = line
+            {
+                let res = Vec::from_iter(ip.split(',').map(String::from));
+
+                let left:Vec<&str> = res[0].split('-').collect();
+
+                let a = left[0].parse::<u32>().unwrap();
+                let b = left[1].parse::<u32>().unwrap();
+
+                let right:Vec<&str> = res[1].split('-').collect();
+
+                let c = right[0].parse::<u32>().unwrap();
+                let d = right[1].parse::<u32>().unwrap();
+
+                /*
+                if inside(a,b,c,d)
+                {
+                    sum += 1;
+                }
+                else if inside(c,d,a,b)
+                {
+                    sum += 1;
+                }
+                */
+
+                if intersect(a,b,c,d) 
+                {
+                    sum += 1;
+                }
+            }
+        }
+    }
+
+   println!("Sum {}", sum);
+}
+
+fn inside(a: u32, b:u32, c:u32, d:u32) -> bool
+{
+    if d > b || c > b
+    {
+        return false;
+    }
+
+    if c < a || d < a
+    {
+        return false;
+    }
+
+    return true;
+}
+
+fn intersect(a: u32, b:u32, c:u32, d:u32) -> bool
+{
+    return a <= d && b >= c;
+}
+
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 where P: AsRef<Path> 
 {
@@ -191,5 +257,5 @@ where P: AsRef<Path>
 
 fn main() 
 {
-    in_poor_elf3_b();
+    in_poor_elf4();
 }
