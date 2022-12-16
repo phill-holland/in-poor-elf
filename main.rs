@@ -228,6 +228,120 @@ fn in_poor_elf4()
    println!("Sum {}", sum);
 }
 
+fn in_poor_elf5()
+{
+    /*
+    [N] [G]                     [Q]    
+    [H] [B]         [B] [R]     [H]    
+    [S] [N]     [Q] [M] [T]     [Z]    
+    [J] [T]     [R] [V] [H]     [R] [S]
+    [F] [Q]     [W] [T] [V] [J] [V] [M]
+    [W] [P] [V] [S] [F] [B] [Q] [J] [H]
+    [T] [R] [Q] [B] [D] [D] [B] [N] [N]
+    [D] [H] [L] [N] [N] [M] [D] [D] [B]
+    1   2   3   4   5   6   7   8   9 
+    */
+
+    //let mut sum:u32 = 0;
+
+    const width:usize = 50;
+    const height:usize = 50;
+
+    let mut crates = [[' '; width]; height];
+    let mut top = [0i32; width];
+
+    for x in 0usize..width
+    {
+        top[x] = 0;
+    }
+
+    populate_column(&mut crates, &mut top, 1, "DTWFJSHN");
+    populate_column(&mut crates, &mut top, 2, "HRPQTNBG");
+    populate_column(&mut crates, &mut top, 3, "LQV");
+    populate_column(&mut crates, &mut top, 4, "NBSWRQ");
+    populate_column(&mut crates, &mut top, 5, "NDFTVMB");
+    populate_column(&mut crates, &mut top, 6, "MDBVHTR");
+    populate_column(&mut crates, &mut top, 7, "DBQJ");
+    populate_column(&mut crates, &mut top, 8, "DNJVRZHQ");
+    populate_column(&mut crates, &mut top, 9, "BNHMS");
+
+    if let Ok(lines) = read_lines("elf5.txt")
+    {
+        for line in lines 
+        {
+            if let Ok(ip) = line
+            {
+                let bobbins:Vec<&str> = ip.split(' ').collect();
+
+                let total = bobbins[1].parse::<u32>().unwrap() as usize;
+                let from = bobbins[3].parse::<u32>().unwrap() as usize;
+                let to = bobbins[5].parse::<u32>().unwrap() as usize;
+
+                /*
+                // PART A 
+                for x in (0usize..total).rev()
+                {
+                    let ch = crates[from][top[from] as usize];
+                    crates[from][top[from] as usize] = ' ';
+                    top[from] -= 1;
+
+                    top[to] += 1;
+                    crates[to][top[to] as usize] = ch;
+                }
+                */
+                
+                let mut susan = String::new();
+
+                for x in (0usize..total)
+                {
+                    let ch = crates[from][top[from] as usize];
+                    crates[from][top[from] as usize] = ' ';
+                    top[from] -= 1;
+                    susan.push(ch);
+                }
+
+                let rev = susan.chars().rev().collect::<String>();
+                for ch in rev.chars()
+                {
+                    top[to] += 1;
+                    crates[to][top[to] as usize] = ch;
+                }
+
+                //println!("{}","hello");
+            }
+        }
+    }
+
+    let mut dave = String::new();
+    for x in 1usize..width
+    {
+        let ch = crates[x][top[x] as usize];        
+        if ch != ' '
+        {
+            dave.push(ch);
+        }
+    }
+
+    println!("Crates {}", dave);
+}
+
+fn populate_column(
+    arr: &mut[[char; 50];50], 
+    top: &mut[i32; 50],
+    column: usize, 
+    value: &str)
+{
+    let mut index = 0;
+
+    for ch in value.chars()
+    {
+        arr[column][index] = ch;
+        index += 1;        
+    }
+
+    top[column] = value.len() as i32 - 1;
+}
+
 fn inside(a: u32, b:u32, c:u32, d:u32) -> bool
 {
     if d > b || c > b
@@ -257,5 +371,5 @@ where P: AsRef<Path>
 
 fn main() 
 {
-    in_poor_elf4();
+    in_poor_elf5();
 }
