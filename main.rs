@@ -325,6 +325,113 @@ fn in_poor_elf5()
     println!("Crates {}", dave);
 }
 
+fn in_poor_elf6()
+{
+    //let mut sum:u32 = 0;
+    let mut dups = false;
+
+    if let Ok(lines) = read_lines("elf6.txt")
+    {
+        for line in lines 
+        {
+            if let Ok(ip) = line
+            {
+                //println!("{}","ip");
+                let mut arr = [' '; 4];
+                let mut index = 0;
+
+                for ch in ip.chars()
+                {
+                    for x in 1usize..4
+                    {
+                        arr[x-1] = arr[x];
+                    }                
+                    arr[3] = ch;
+                    dups = false;
+                    
+                    for x in 0usize..4
+                    {
+                        if arr[x] != ' '
+                        {
+                            for y in 0usize..4
+                            {
+                                if arr[y] != ' ' && x != y
+                                {
+                                    if arr[x] == arr[y] 
+                                    {
+                                        dups = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if !dups && index >= 3
+                    {
+                        println!("Index {}", index + 1);
+                    }
+
+                    index += 1;
+                }
+            }
+        }
+    }
+}
+
+
+fn in_poor_elf6_b()
+{
+    //let mut sum:u32 = 0;
+    let mut dups = false;
+
+    if let Ok(lines) = read_lines("elf6.txt")
+    {
+        for line in lines 
+        {
+            if let Ok(ip) = line
+            {
+                //println!("{}","ip");
+                let mut arr = [' '; 14];
+                let mut index = 0;
+
+                for ch in ip.chars()
+                {
+                    for x in 1usize..14
+                    {
+                        arr[x-1] = arr[x];
+                    }                
+                    arr[13] = ch;
+                    dups = false;
+                    
+                    for x in 0usize..14
+                    {
+                        if arr[x] != ' '
+                        {
+                            for y in 0usize..14
+                            {
+                                if arr[y] != ' ' && x != y
+                                {
+                                    if arr[x] == arr[y] 
+                                    {
+                                        dups = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if !dups && index >= 13
+                    {
+                        println!("Index {}", index + 1);
+                    }
+
+                    index += 1;
+                }
+            }
+        }
+    }
+}
+
 fn populate_column(
     arr: &mut[[char; 50];50], 
     top: &mut[i32; 50],
@@ -371,5 +478,5 @@ where P: AsRef<Path>
 
 fn main() 
 {
-    in_poor_elf5();
+    in_poor_elf6_b();
 }
